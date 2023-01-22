@@ -7,6 +7,7 @@ const output1 = genElement(
   "div",
   "Please Make Your Selection<br> № Questions"
 );
+output1.classList.add("box");
 const inputVal = document.querySelector(".val");
 
 output1.append(inputVal);
@@ -84,7 +85,6 @@ function popPage(url) {
 
 function outputPage() {
   // condition check to see if the question value and what else we can do is we can look at the question value or the game question
-  h1.textContent = `Question ${game.question} of ${game.que.length} - SCORE : ${game.score}`;
 
   if (game.question >= game.que.length) {
     output.innerHTML = `<div>Your Score was ${game.score} out of ${game.que.length}</div>`;
@@ -96,6 +96,7 @@ function outputPage() {
 
     let question = game.que[game.question];
     game.question++; // move to next question
+    h1.textContent = `Question ${game.question} of ${game.que.length} - SCORE : ${game.score}`;
     console.log(question);
 
     // Let's build an array with answers

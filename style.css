@@ -6,7 +6,32 @@ body {
   font-family: "Work Sans", sans-serif;
 }
 
-.output {
+h1 {
+  text-align: center;
+}
+
+.box {
+  text-align: center;
+}
+
+.box input,
+.box select,
+.box button {
+  font-size: 1.2em;
+  border: 1px solid #222;
+  line-height: 28px;
+  text-transform: capitalize;
+  margin: 5px;
+  min-height: 35px; /* for all blocks*/
+}
+
+.box input {
+  font-size: 1em;
+  width: 80px;
+}
+
+.output,
+.box {
   width: 80%;
   margin: auto;
   border: 1px solid #ccc;
