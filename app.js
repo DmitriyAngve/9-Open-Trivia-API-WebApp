@@ -8,6 +8,7 @@ const game = { que: [], question: 0 };
 
 window.addEventListener("DOMContentLoaded", (e) => {
   console.log("DOM ready");
+  testinsert();
   btn1.textContent = "Start Game";
   inputVal.setAttribute("type", "number");
   inputVal.value = 10;
@@ -22,6 +23,15 @@ btn1.addEventListener("click", (e) => {
   console.log(temURL);
   popPage(temURL);
 });
+
+function testinsert() {
+  for (let x = 0; x < 500; x++) {
+    let tempArr = [0, 0, 0];
+    let ranIndex = Math.floor(Math.random() * tempArr.length + 1);
+    tempArr.splice(ranIndex, 0, 1);
+    output.innerHTML += JSON.stringify(tempArr) + ": " + ranIndex + "<br>";
+  }
+}
 
 function popPage(url) {
   fetch(url)
@@ -41,7 +51,13 @@ function outputPage() {
 
   // Let's build an array with answers
   let answers = question.incorrect_answers;
-  answers.push(question.correct_answer);
+
+  // Random places answers (random spots)
+  let ranIndex = Math.floor(Math.random() * (answers.length + 1)); // this give a random index of value that where we can insert on page
+  console.log(ranIndex);
+  answers.splice(ranIndex, 0, question.correct_answer);
+
+  //   answers.push(question.correct_answer);
   console.log(answers);
   const mainDiv = genElement(output, "div", "");
   const que1 = genElement(mainDiv, "div", question.question);
@@ -54,12 +70,18 @@ function outputPage() {
       } else {
         console.log("wrong");
       }
+      nextQue(optsDiv);
     });
   });
 
   //   game.que.forEach((el) => {
   //     console.log(el);
   //   });
+}
+
+function nextQue(parent) {
+  const btn2 = genElement(parent, "button", "Next Question");
+  btn2.addEventListener("click", outputPage);
 }
 
 function genElement(parent, eleType, html) {
