@@ -44,58 +44,68 @@ function popPage(url) {
 }
 
 function outputPage() {
-  output.innerHTML = "";
-  let question = game.que[game.question];
-  game.question++; // move to next question
-  console.log(question);
+  // condition check to see if the question value and what else we can do is we can look at the question value or the game question
+  if (game.question >= game.que.length) {
+    output.innerHTML = "Game Over!";
+    btn1.style.display = "block";
+    inputVal.style.display = "block";
+    game.question = 0;
+  } else {
+    output.innerHTML = "";
 
-  // Let's build an array with answers
-  let answers = question.incorrect_answers;
+    let question = game.que[game.question];
+    game.question++; // move to next question
+    console.log(question);
 
-  // Random places answers (random spots)
-  let ranIndex = Math.floor(Math.random() * (answers.length + 1)); // this give a random index of value that where we can insert on page
-  console.log(ranIndex);
-  answers.splice(ranIndex, 0, question.correct_answer);
+    // Let's build an array with answers
+    let answers = question.incorrect_answers;
 
-  //   answers.push(question.correct_answer);
-  console.log(answers);
-  const mainDiv = genElement(output, "div", "");
-  const que1 = genElement(mainDiv, "div", question.question);
+    // Random places answers (random spots)
+    let ranIndex = Math.floor(Math.random() * (answers.length + 1)); // this give a random index of value that where we can insert on page
+    console.log(ranIndex);
+    answers.splice(ranIndex, 0, question.correct_answer);
 
-  game.eles.length = 0;
+    //   answers.push(question.correct_answer);
+    console.log(answers);
 
-  const optsDiv = genElement(output, "div", "");
-  answers.forEach((opt) => {
-    const opt1 = genElement(optsDiv, "button", opt);
-    game.eles.push(opt1);
-    if (opt == question.correct_answer) {
-      opt1.bgC = "green";
-    } else {
-      opt1.bgC = "red";
-    }
-    opt1.addEventListener("click", (e) => {
-      game.eles.forEach((btnv) => {
-        btnv.disabled = true;
-        btnv.style.backgroundColor = btnv.bgC;
-      });
-      const message = genElement(mainDiv, "div", "You got it Incorrect!");
+    const mainDiv = genElement(output, "div", "");
+    const que1 = genElement(mainDiv, "div", question.question);
 
+    game.eles.length = 0;
+
+    const optsDiv = genElement(output, "div", "");
+    answers.forEach((opt) => {
+      const opt1 = genElement(optsDiv, "button", opt);
+      game.eles.push(opt1);
       if (opt == question.correct_answer) {
-        console.log("correct");
-        message.textContent = "You got it Correct!<br>";
-        opt1.style.backgroundColor = "green";
+        opt1.bgC = "green";
       } else {
-        console.log("wrong");
-        opt1.style.backgroundColor = "red";
+        opt1.bgC = "red";
       }
-      nextQue(optsDiv);
-      console.log(game);
-    });
-  });
+      opt1.addEventListener("click", (e) => {
+        game.eles.forEach((btnv) => {
+          btnv.disabled = true;
+          btnv.style.backgroundColor = btnv.bgC;
+        });
+        const message = genElement(optsDiv, "div", "You got it Incorrect!<br>");
 
-  //   game.que.forEach((el) => {
-  //     console.log(el);
-  //   });
+        if (opt == question.correct_answer) {
+          console.log("correct");
+          message.innerHTML = "You got it Correct! <br>";
+          opt1.style.backgroundColor = "green";
+        } else {
+          console.log("wrong");
+          opt1.style.backgroundColor = "red";
+        }
+        nextQue(message); // when we generate a message or when we generate the next question, we can send in that as the parent
+        console.log(game);
+      });
+    });
+
+    //   game.que.forEach((el) => {
+    //     console.log(el);
+    //   });
+  }
 }
 
 function nextQue(parent) {
