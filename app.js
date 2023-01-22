@@ -1,25 +1,65 @@
 const btn1 = document.querySelector(".btn");
 const h1 = document.querySelector("h1");
 const output = document.querySelector(".output");
+const output1 = genElement(
+  document.body,
+  "div",
+  "Please Make Your Selection<br> № Questions"
+);
 const inputVal = document.querySelector(".val");
+
+output1.append(inputVal);
+
+// Lets populate select list dynamically
+const sel1 = genElement(output1, "select", "");
+const sel2 = genElement(output1, "select", "");
+
+output1.append(btn1);
+
 const baseURL = "https://opentdb.com/api.php?";
 // https://opentdb.com/api.php?amount=9&category=14
 const game = { que: [], question: 0, eles: [] };
+const cats = [
+  { title: "General", num: 1 },
+  { title: "Sports", num: 21 },
+  { title: "Mythology", num: 20 },
+  { title: "Art", num: 25 },
+  { title: "Animals", num: 27 },
+];
+
+const dif = ["easy", "medium", "hard"];
 
 window.addEventListener("DOMContentLoaded", (e) => {
   console.log("DOM ready");
+  getSelections();
+
   //   testinsert();
+
   btn1.textContent = "Start Game";
   inputVal.setAttribute("type", "number");
   inputVal.value = 10;
 });
+
+function getSelections() {
+  cats.forEach((cat) => {
+    console.log(cat);
+    const optEle = genElement(sel1, "option", cat.title);
+    optEle.value = cat.num;
+  });
+
+  dif.forEach((d) => {
+    console.log(d);
+    const optEle = genElement(sel2, "option", d);
+    optEle.value = d;
+  });
+}
 
 btn1.addEventListener("click", (e) => {
   btn1.style.display = "none";
   inputVal.style.display = "none";
   h1.textContent = inputVal.value + " question(s) selected";
 
-  let temURL = baseURL + "amount=" + inputVal.value;
+  let temURL = `${baseURL}amount=${inputVal.value}&difficulty=${sel2.value}&category=${sel1.value}`;
   console.log(temURL);
   popPage(temURL);
 });
