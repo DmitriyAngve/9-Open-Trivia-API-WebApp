@@ -1,5 +1,6 @@
 const btn1 = document.querySelector(".btn");
 const h1 = document.querySelector("h1");
+h1.textContent = "Trivia DataBase Game";
 const output = document.querySelector(".output");
 const output1 = genElement(
   document.body,
@@ -18,10 +19,10 @@ output1.append(btn1);
 
 const baseURL = "https://opentdb.com/api.php?";
 // https://opentdb.com/api.php?amount=9&category=14
-const game = { que: [], question: 0, eles: [] };
+const game = { que: [], question: 0, eles: [], score: 0 };
 const cats = [
-  { title: "General", num: 1 },
-  { title: "Sports", num: 21 },
+  { title: "General", num: 9 },
+  { title: "Geography", num: 22 },
   { title: "Mythology", num: 20 },
   { title: "Art", num: 25 },
   { title: "Animals", num: 27 },
@@ -55,10 +56,8 @@ function getSelections() {
 }
 
 btn1.addEventListener("click", (e) => {
-  btn1.style.display = "none";
-  inputVal.style.display = "none";
+  output1.style.display = "none";
   h1.textContent = inputVal.value + " question(s) selected";
-
   let temURL = `${baseURL}amount=${inputVal.value}&difficulty=${sel2.value}&category=${sel1.value}`;
   console.log(temURL);
   popPage(temURL);
@@ -85,10 +84,12 @@ function popPage(url) {
 
 function outputPage() {
   // condition check to see if the question value and what else we can do is we can look at the question value or the game question
+  h1.textContent = `Question ${game.question} of ${game.que.length} - SCORE : ${game.score}`;
+
   if (game.question >= game.que.length) {
-    output.innerHTML = "Game Over!";
-    btn1.style.display = "block";
-    inputVal.style.display = "block";
+    output.innerHTML = `<div>Your Score was ${game.score} out of ${game.que.length}</div>`;
+    game.score = 0;
+    output1.style.display = "block";
     game.question = 0;
   } else {
     output.innerHTML = "";
@@ -127,16 +128,24 @@ function outputPage() {
           btnv.disabled = true;
           btnv.style.backgroundColor = btnv.bgC;
         });
-        const message = genElement(optsDiv, "div", "You got it Incorrect!<br>");
+        const message = genElement(
+          optsDiv,
+          "div",
+          `You got it Incorrect! <small>${question.correct_answer} was correct.</small><br>`
+        );
 
         if (opt == question.correct_answer) {
           console.log("correct");
-          message.innerHTML = "You got it Correct! <br>";
+          message.innerHTML = `You got it Correct! <small>${opt} was correct.</small><br>`;
+          game.score++;
+
           opt1.style.backgroundColor = "green";
         } else {
           console.log("wrong");
           opt1.style.backgroundColor = "red";
         }
+
+        h1.textContent = `Question ${game.question} of ${game.que.length} - SCORE : ${game.score}`;
         nextQue(message); // when we generate a message or when we generate the next question, we can send in that as the parent
         console.log(game);
       });
