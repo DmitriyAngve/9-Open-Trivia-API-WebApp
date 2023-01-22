@@ -4,11 +4,11 @@ const output = document.querySelector(".output");
 const inputVal = document.querySelector(".val");
 const baseURL = "https://opentdb.com/api.php?";
 // https://opentdb.com/api.php?amount=9&category=14
-const game = { que: [], question: 0 };
+const game = { que: [], question: 0, eles: [] };
 
 window.addEventListener("DOMContentLoaded", (e) => {
   console.log("DOM ready");
-  testinsert();
+  //   testinsert();
   btn1.textContent = "Start Game";
   inputVal.setAttribute("type", "number");
   inputVal.value = 10;
@@ -61,16 +61,35 @@ function outputPage() {
   console.log(answers);
   const mainDiv = genElement(output, "div", "");
   const que1 = genElement(mainDiv, "div", question.question);
+
+  game.eles.length = 0;
+
   const optsDiv = genElement(output, "div", "");
   answers.forEach((opt) => {
     const opt1 = genElement(optsDiv, "button", opt);
+    game.eles.push(opt1);
+    if (opt == question.correct_answer) {
+      opt1.bgC = "green";
+    } else {
+      opt1.bgC = "red";
+    }
     opt1.addEventListener("click", (e) => {
+      game.eles.forEach((btnv) => {
+        btnv.disabled = true;
+        btnv.style.backgroundColor = btnv.bgC;
+      });
+      const message = genElement(mainDiv, "div", "You got it Incorrect!");
+
       if (opt == question.correct_answer) {
         console.log("correct");
+        message.textContent = "You got it Correct!<br>";
+        opt1.style.backgroundColor = "green";
       } else {
         console.log("wrong");
+        opt1.style.backgroundColor = "red";
       }
       nextQue(optsDiv);
+      console.log(game);
     });
   });
 
